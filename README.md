@@ -1,11 +1,17 @@
 # Research Document Intelligence Platform
 
-<img width="1704" height="911" alt="Screenshot 2026-02-27 at 4 14 23 PM" src="https://github.com/user-attachments/assets/39c36060-0d42-4d85-9d64-26f9c4e39c0e" />
+<img width="1279" height="582" alt="Screenshot 2026-02-27 at 6 13 24 PM" src="https://github.com/user-attachments/assets/bdcefd20-6c23-417c-b912-eb5ec3643f30" />
 
 ---
 
-<img width="1706" height="910" alt="Screenshot 2026-02-27 at 4 14 07 PM" src="https://github.com/user-attachments/assets/c6a02451-1b79-4ee2-86c8-a7c44d8ae15b" />
+<img width="1277" height="580" alt="Screenshot 2026-02-27 at 6 13 43 PM" src="https://github.com/user-attachments/assets/32e150d5-a692-43c0-b19a-b2149a353186" />
 
 ---
 
-<img width="1707" height="912" alt="Screenshot 2026-02-27 at 4 17 50 PM" src="https://github.com/user-attachments/assets/1ff27ab4-c446-4c9d-a959-92f73639703c" />
+<img width="1278" height="584" alt="Screenshot 2026-02-27 at 6 13 58 PM" src="https://github.com/user-attachments/assets/85ac5c6e-69ae-4d81-95ff-eff0bac95230" />
+
+---
+
+<img width="1280" height="581" alt="Screenshot 2026-02-27 at 6 14 24 PM" src="https://github.com/user-attachments/assets/f768f7b1-7265-4f1b-9a7e-0fab7f0a0c71" />
+
+---
