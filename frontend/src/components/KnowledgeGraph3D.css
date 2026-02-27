@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;700&display=swap');
+
+.graph-shell {
+  background: radial-gradient(circle at 15% 15%, rgba(139, 99, 255, 0.22), transparent 45%),
+    radial-gradient(circle at 82% 10%, rgba(59, 130, 246, 0.18), transparent 42%),
+    linear-gradient(150deg, #0c0d14 0%, #111325 58%, #0f1018 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 55px rgba(7, 9, 19, 0.55);
+}
+
+.graph-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+}
+
+.graph-title {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  font-size: 17px;
+  color: #ecebff;
+}
+
+.graph-subtitle {
+  color: #b5b7ca;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.graph-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.graph-chip {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #dbddf4;
+  background: rgba(17, 19, 37, 0.68);
+}
+
+.graph-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  min-height: 620px;
+}
+
+.graph-canvas {
+  min-width: 0;
+}
+
+.graph-sidebar {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  padding: 18px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.graph-panel-title {
+  color: #eef0ff;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.graph-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d3d6ea;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.graph-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.graph-selected {
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  background: rgba(12, 13, 21, 0.72);
+}
+
+.graph-selected h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: #f0f1ff;
+  margin-bottom: 6px;
+}
+
+.graph-selected p {
+  color: #b4b7cf;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.graph-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b7b9d0;
+  font-family: 'Manrope', sans-serif;
+  min-height: 620px;
+  padding: 24px;
+  text-align: center;
+}
+
+@media (max-width: 1080px) {
+  .graph-body {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-sidebar {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
