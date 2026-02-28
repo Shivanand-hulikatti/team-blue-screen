@@ -1,5 +1,11 @@
 # Mirage
 
+https://github.com/user-attachments/assets/b7dcf49b-c0d2-408e-934c-e3d95b0fec7f
+
+
+
+
+
 AI-powered research document intelligence platform with:
 - Project-scoped PDF ingestion and processing
 - Automatic insight + highlight extraction
