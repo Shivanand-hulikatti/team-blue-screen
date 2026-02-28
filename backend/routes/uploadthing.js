@@ -12,18 +12,54 @@ const utapi = new UTApi();
  * POST /api/uploadthing-upload
  * Direct file upload to UploadThing
  */
+// router.post('/uploadthing-upload', upload.single('file'), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ error: 'No file uploaded' });
+//     }
+
+//     // Create a File object from the buffer
+//     const file = new File([req.file.buffer], req.file.originalname, {
+//       type: req.file.mimetype,
+//     });
+
+//     // Upload to UploadThing
+//     // const response = await utapi.uploadFiles([file]);
+
+//     const response = await utapi.uploadFiles([
+//       {
+//         name: req.file.originalname,
+//         type: req.file.mimetype,
+//         size: req.file.size,
+//         data: req.file.buffer,
+//       },
+//     ]);
+
+//     if (response[0].error) {
+//       throw new Error(response[0].error.message);
+//     }
+
+//     res.json({
+//       fileUrl: response[0].data.ufsUrl || response[0].data.url,
+//       success: true
+//     });
+//   } catch (err) {
+//     console.error('UploadThing upload error:', err.message);
+//     res.status(500).json({ error: 'Failed to upload file' });
+//   }
+// });
 router.post('/uploadthing-upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Create a File object from the buffer
-    const file = new File([req.file.buffer], req.file.originalname, {
-      type: req.file.mimetype,
-    });
+    const file = new File(
+      [req.file.buffer],
+      req.file.originalname,
+      { type: req.file.mimetype }
+    );
 
-    // Upload to UploadThing
     const response = await utapi.uploadFiles([file]);
 
     if (response[0].error) {
@@ -32,13 +68,15 @@ router.post('/uploadthing-upload', upload.single('file'), async (req, res) => {
 
     res.json({
       fileUrl: response[0].data.ufsUrl || response[0].data.url,
-      success: true
+      success: true,
     });
+
   } catch (err) {
-    console.error('UploadThing upload error:', err.message);
+    console.error('UploadThing upload error:', err);
     res.status(500).json({ error: 'Failed to upload file' });
   }
 });
+
 
 /**
  * Legacy presign endpoint - returns success to indicate direct upload should be used

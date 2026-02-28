@@ -85,13 +85,13 @@ export default function InsightTooltip({ insight, anchorRect }) {
         border:       '1px solid var(--border)',
         borderRadius: 'var(--radius, 10px)',
         boxShadow:    '0 4px 6px rgba(0,0,0,0.10), 0 16px 40px rgba(0,0,0,0.35)',
-        padding:      '14px 16px',
+        padding:      '16px 20px',
         pointerEvents:'none',
         opacity:      style.opacity,
         animation:    style.animation,
-        fontSize:     13,
+        fontSize:     15,
         color:        'var(--text)',
-        lineHeight:   1.5,
+        lineHeight:   1.6,
       }}
     >
       {/* ── Caret ── */}
@@ -156,15 +156,15 @@ export default function InsightTooltip({ insight, anchorRect }) {
           display:         'inline-flex',
           alignItems:      'center',
           justifyContent:  'center',
-          width:           22,
-          height:          22,
+          width:           26,
+          height:          26,
           borderRadius:    '50%',
           background:      'rgba(245,158,11,0.15)',
-          fontSize:        12,
+          fontSize:        14,
           flexShrink:      0,
         }}>💡</span>
         <span style={{
-          fontSize:      11,
+          fontSize:      13,
           fontWeight:    700,
           color:         'var(--accent-light)',
           textTransform: 'uppercase',
@@ -185,9 +185,9 @@ export default function InsightTooltip({ insight, anchorRect }) {
       {/* ── Description ── */}
       <p style={{
         margin:      0,
-        marginBottom: insight.highlights && insight.highlights.length ? 12 : 0,
-        fontSize:    13,
-        lineHeight:  1.65,
+        marginBottom: insight.highlights && insight.highlights.length ? 14 : 0,
+        fontSize:    15,
+        lineHeight:  1.7,
         color:       'var(--text)',
       }}>
         {insight.insightText}
@@ -197,7 +197,7 @@ export default function InsightTooltip({ insight, anchorRect }) {
       {insight.highlights && insight.highlights.length > 0 && (
         <div>
           <p style={{
-            fontSize:      10,
+            fontSize:      12,
             fontWeight:    700,
             color:         'var(--text-dim)',
             marginBottom:  7,
@@ -212,11 +212,11 @@ export default function InsightTooltip({ insight, anchorRect }) {
                 background:   'rgba(245,158,11,0.1)',
                 border:       '1px solid rgba(245,158,11,0.3)',
                 borderRadius: 20,
-                padding:      '3px 9px',
-                fontSize:     11,
+                padding:      '4px 12px',
+                fontSize:     13,
                 color:        'var(--warning)',
                 fontStyle:    'italic',
-                whiteSpace:   'nowrap',
+                whiteSpace:   'wrap',
               }}>
                 &ldquo;{hl.text}&rdquo;
               </span>

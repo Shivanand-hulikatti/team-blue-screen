@@ -5,13 +5,20 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Attach JWT token to every request if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 // Projects
 export const createProject = (name) => api.post('/projects', { name, userId: 'default-user' });
 export const listProjects = () => api.get('/projects');
 export const getProject = (id) => api.get(`/projects/${id}`);
 export const deleteProject = (id) => api.delete(`/projects/${id}`);
-export const getProjectKnowledgeGraph = (projectId) =>
-  api.get(`/projects/${projectId}/knowledge-graph`);
+export const getProjectKnowledgeGraph = (projectId, params = {}) =>
+  api.get(`/projects/${projectId}/knowledge-graph`, { params });
 
 // Documents
 export const uploadDocument = (projectId, fileUrl, filename) =>
@@ -29,3 +36,9 @@ export const createInsight = (projectId, documentId, payload) =>
 // Chat
 export const sendChat = (projectId, data) =>
   api.post(`/projects/${projectId}/chat`, data);
+
+// Project Summary
+export const generateProjectSummary = (projectId) =>
+  api.post(`/projects/${projectId}/summary`);
+export const getProjectSummary = (projectId) =>
+  api.get(`/projects/${projectId}/summary`);

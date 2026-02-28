@@ -111,7 +111,56 @@ function LandingStyles() {
       .step-card:hover {
         transform: translateY(-2px);
       }
+      @keyframes flipIn {
+        0%   { opacity: 0; transform: translateY(60%) rotateX(-30deg); filter: blur(4px); }
+        100% { opacity: 1; transform: translateY(0%)  rotateX(0deg);   filter: blur(0px); }
+      }
+      @keyframes flipOut {
+        0%   { opacity: 1; transform: translateY(0%)   rotateX(0deg);   filter: blur(0px); }
+        100% { opacity: 0; transform: translateY(-60%) rotateX(30deg);  filter: blur(4px); }
+      }
+      .flip-word-in  { animation: flipIn  0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+      .flip-word-out { animation: flipOut 0.35s cubic-bezier(0.55,0,1,0.45) forwards; }
     `}</style>
+  )
+}
+
+// ============================================================================
+// FlipWords Component (Aceternity-style)
+// ============================================================================
+function FlipWords({ words, className = "", interval = 2800 }) {
+  const [current, setCurrent] = useState(0)
+  const [phase, setPhase] = useState("in") // "in" | "out"
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setPhase("out")
+      setTimeout(() => {
+        setCurrent(i => (i + 1) % words.length)
+        setPhase("in")
+      }, 380)
+    }, interval)
+    return () => clearInterval(tick)
+  }, [words.length, interval])
+
+  return (
+    <span
+      className={className}
+      style={{
+        display: "inline-block",
+        position: "relative",
+        perspective: "800px",
+        transformStyle: "preserve-3d",
+      }}
+    >
+      <span
+        key={current}
+        className={phase === "in" ? "flip-word-in" : "flip-word-out"}
+        style={{ display: "inline-block", transformOrigin: "50% 100%" }}
+      >
+        {words[current]}
+      </span>
+    </span>
   )
 }
 
@@ -889,106 +938,109 @@ export default function LandingPage() {
             </div>
 
             {/* Hero Section */}
-            <div className="w-full relative overflow-hidden" style={{ minHeight: "100svh" }}>
-              {/* Background image with radial gradient mask */}
+            <div className="w-full relative overflow-hidden" style={{ height: "100svh" }}>
+
+              {/* Hero — 2-col: content left, video right — centered with max-width */}
               <div
-                className="absolute inset-0"
-                style={{
-                  maskImage: "radial-gradient(ellipse 80% 70% at 50% 0%, black 40%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 0%, black 40%, transparent 100%)",
-                }}
+                className="relative z-10 w-full h-full flex items-stretch justify-center"
+                style={{ paddingTop: 80 }}
               >
-                <img
-                  src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?q=80&w=2340&auto=format&fit=crop"
-                  alt=""
-                  className="w-full h-full object-cover object-top"
-                  style={{ opacity: 0.18 }}
-                />
-              </div>
+                <div className="w-full max-w-[1200px] py-10 mx-auto px-6 md:px-12 md:py-10 grid grid-cols-1 md:grid-cols-[460px_1fr] gap-0 h-full">
 
-              {/* Hero content */}
-              <div className="relative z-10 flex flex-col items-center justify-center pt-28 sm:pt-36 md:pt-44 pb-16 sm:pb-20 px-4">
-                {/* Badge */}
-                <div className="fade-up mb-5">
-                  <Badge
-                    icon={<div className="w-[8px] h-[8px] rounded-full bg-[#37322F]"></div>}
-                    text="AI Document Intelligence"
-                  />
-                </div>
+                  {/* ── Left: headline + description + CTA ── */}
+                  <div className="fade-up flex flex-col justify-between py-10 pr-0 md:pr-12 h-full min-h-0">
 
-                {/* Title */}
-                <h1 className="fade-up delay-1 font-serif text-center text-[#2A2520] font-normal tracking-tight"
-                  style={{ fontSize: "clamp(2.4rem, 7vw, 5.2rem)", lineHeight: 1.08, maxWidth: 720 }}>
-                  Research,
-                  <br />
-                  Understood.
-                </h1>
-
-                {/* Subtitle */}
-                <p className="fade-up delay-2 mt-5 text-center text-[#6B6460] font-sans font-normal"
-                  style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)", lineHeight: 1.65, maxWidth: 460 }}>
-                  Upload research PDFs. Mirage extracts insights, answers questions with source citations, and maps every concept into a navigable 3D knowledge graph.
-                </p>
-
-                {/* CTA */}
-                <div className="fade-up delay-3 mt-8 flex items-center gap-3">
-                  <Link to="/app">
-                    <div className="btn-primary h-11 px-8 relative bg-[#2A2520] shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset] overflow-hidden rounded-full flex items-center gap-2 cursor-pointer">
-                      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(255,255,255,0.06)] to-transparent"></div>
-                      <span className="relative text-white text-[14px] font-medium leading-5 font-sans">Start Researching</span>
-                      <svg className="relative" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="rgba(255,255,255,0.6)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                  </Link>
-                  <a href="#how-it-works">
-                    <div className="btn-secondary h-11 px-6 bg-white border border-[rgba(55,50,47,0.12)] shadow-[0_1px_3px_rgba(55,50,47,0.08)] rounded-full flex items-center cursor-pointer">
-                      <span className="text-[#37322F] text-[14px] font-medium leading-5 font-sans">How it works</span>
-                    </div>
-                  </a>
-                </div>
-
-                {/* Social proof */}
-                <div className="fade-up delay-4 mt-5 flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
-                  {["PDF extraction", "Vector search", "RAG chat", "3D graph"].map((s, i) => (
-                    <div key={i} className="flex items-center gap-1.5">
-                      {i > 0 && <span className="text-[rgba(55,50,47,0.2)] text-xs hidden sm:inline">·</span>}
-                      <span className="text-[11px] text-[rgba(55,50,47,0.5)] font-sans">{s}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tech stack integration grid */}
-              <div className="relative z-10 mx-auto pb-20 sm:pb-28" style={{ maxWidth: 520 }}>
-                <div className="grid grid-cols-3 gap-y-5 gap-x-3 px-4 sm:px-0" style={{ filter: "drop-shadow(0 2px 8px rgba(55,50,47,0.06))" }}>
-                  {[
-                    { label: "PyMuPDF",          dot: "#F59E0B", blur: true  },
-                    { label: "SentenceTransformers", dot: "#3B82F6", blur: false },
-                    { label: "OpenRouter",       dot: "#10B981", blur: true  },
-                    { label: "Vector Search",    dot: "#8B5CF6", blur: false },
-                    { label: "FastAPI",          dot: "#EF4444", blur: true  },
-                    { label: "Node.js",          dot: "#22C55E", blur: false },
-                    { label: "Three.js",         dot: "#06B6D4", blur: true  },
-                    { label: "React",            dot: "#60A5FA", blur: false },
-                    { label: "Docker",           dot: "#0EA5E9", blur: true  },
-                  ].map((tech, i) => (
-                    <div
-                      key={i}
-                      className={`flex justify-center ${
-                        i % 3 === 0 ? "ml-auto pr-2" : i % 3 === 2 ? "mr-auto pl-2" : ""
-                      }`}
-                    >
-                      <div
-                        className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-[rgba(55,50,47,0.10)] rounded-xl shadow-[0_1px_4px_rgba(55,50,47,0.08)] font-sans"
-                        style={{
-                          filter: tech.blur ? "blur(1.5px)" : "none",
-                          opacity: tech.blur ? 0.75 : 1,
-                        }}
+                    {/* Headline with flip words — top-aligned */}
+                    <div>
+                      <h1
+                        className="font-serif text-[#2A2520] font-normal tracking-tight"
+                        style={{ fontSize: "clamp(2.8rem, 5vw, 5rem)", lineHeight: 1.05 }}
                       >
-                        <div style={{ width: 7, height: 7, borderRadius: "50%", background: tech.dot, flexShrink: 0 }} />
-                        <span className="text-[#37322F] font-medium text-[12px] sm:text-[13px] whitespace-nowrap">{tech.label}</span>
+                        Research
+                        <br />
+                        <FlipWords
+                          words={["Faster.","Smarter.","Deeper.","Effortlessly."]}
+                          className="text-[#2A2520]"
+                          interval={2600}
+                        />
+                      </h1>
+
+                      {/* Sub-description */}
+                      <p
+                        className="font-sans font-normal text-[#6B6460] mt-6"
+                        style={{ fontSize: "clamp(0.88rem, 1.2vw, 1rem)", lineHeight: 1.75, maxWidth: 380 }}
+                      >
+                        Your research is buried in scattered PDFs.
+                        <span className="text-[#C9472A] font-semibold"> Set it free in minutes.</span>
+                        <br /><br />
+                        Upload your papers — Mirage extracts insights, agents surface what matters, and ships deep understanding fast.
+                      </p>
+                    </div>
+
+                    {/* CTA — bottom of left column */}
+                    <div className="fade-up delay-2 flex flex-col gap-3">
+                      <Link to="/app">
+                        <div
+                          className="btn-primary relative overflow-hidden flex items-center gap-2 cursor-pointer w-fit"
+                          style={{
+                            height: 52,
+                            paddingLeft: 36,
+                            paddingRight: 36,
+                            background: "#1C1917",
+                            borderRadius: 100,
+                            boxShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 4px 16px rgba(28,25,23,0.30)",
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(255,255,255,0.06)] to-transparent rounded-full" />
+                          <span className="relative text-white font-sans font-medium" style={{ fontSize: 15, letterSpacing: "-0.01em" }}>
+                            Start my Research
+                          </span>
+                          <svg className="relative" width="15" height="15" viewBox="0 0 14 14" fill="none">
+                            <path d="M3 7h8M7 3l4 4-4 4" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      </Link>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        {["PDF extraction", "Vector search", "RAG chat", "3D graph"].map((s, i) => (
+                          <div key={i} className="flex items-center gap-1.5">
+                            {i > 0 && <span className="text-[rgba(55,50,47,0.2)] text-xs">·</span>}
+                            <span className="text-[11px] text-[rgba(55,50,47,0.45)] font-sans">{s}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  ))}
+
+                  </div>
+
+                  {/* ── Right: large video, right-anchored ── */}
+                  <div className="relative h-full min-h-0 flex items-start justify-center overflow-hidden">
+                    <div
+                      style={{
+                        width: "min(600px, 100%)",
+                        height: "100%",
+                        position: "relative",
+                        maskImage: "linear-gradient(to bottom, black 0%, black 52%, transparent 100%)",
+                        WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 52%, transparent 100%)",
+                      }}
+                    >
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center top",
+                          display: "block",
+                        }}
+                      >
+                        <source src="/ajja.mp4" type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -999,9 +1051,9 @@ export default function LandingPage() {
                 <div className="w-full h-[220px] sm:h-[320px] md:h-[460px] lg:h-[600px] bg-white shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(55,50,47,0.10)] overflow-hidden rounded-[10px] flex flex-col">
                   <div className="flex-1 relative overflow-hidden">
                     {[
-                      "/images/projects.png",
-                      "/images/projects-dash.png",
-                      "/images/kgraph.png",
+                      "/images/projectss.png",
+                      "/images/anno.png",
+                      "/images/kg.png",
                     ].map((src, idx) => (
                       <div
                         key={idx}
@@ -1156,7 +1208,7 @@ export default function LandingPage() {
                           <rect x="7" y="7" width="4" height="4" stroke="#37322F" strokeWidth="1" fill="none" />
                         </svg>
                       }
-                      text="Bento grid"
+                      text="Features"
                     />
                     <div className="w-full max-w-[598.06px] lg:w-[598.06px] text-center flex justify-center flex-col text-[#2A2520] text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
                       Every feature built for deep research

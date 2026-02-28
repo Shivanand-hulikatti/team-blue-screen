@@ -4,7 +4,9 @@ import { getProject, listDocuments } from '../api';
 import UploadArea from '../components/UploadArea';
 import ChatBox from '../components/ChatBox';
 import KnowledgeGraph3D from '../components/KnowledgeGraph3D';
+import ProjectSummary from '../components/ProjectSummary';
 import { useToast } from '../hooks/useToast';
+import UserMenu from '../components/UserMenu';
 
 const POLL_INTERVAL = 3000;
 
@@ -14,7 +16,7 @@ function StatusBadge({ status }) {
   return (
     <span className={`badge ${map[status] || 'badge-uploaded'}`}>
       {status === 'PROCESSING' && (
-        <span className="spinner" style={{ width: 8, height: 8, borderWidth: 1.5 }} />
+        <span className="spinner" style={{ width: 9, height: 9, borderWidth: 1.5 }} />
       )}
       {labels[status] || status}
     </span>
@@ -42,15 +44,17 @@ export default function ProjectPage() {
       const docs = docsRes.data;
 
       docs.forEach((doc) => {
-        if (prevStatuses.current[doc._id] === 'PROCESSING' && doc.status === 'DONE')
+        if (prevStatuses.current[doc._id] === 'PROCESSING' && doc.status === 'DONE') {
           toast(`"${doc.filename}" is ready`, 'success', 5000);
-        if (prevStatuses.current[doc._id] === 'PROCESSING' && doc.status === 'ERROR')
+        }
+        if (prevStatuses.current[doc._id] === 'PROCESSING' && doc.status === 'ERROR') {
           toast(`"${doc.filename}" failed to process`, 'error', 5000);
+        }
         prevStatuses.current[doc._id] = doc.status;
       });
 
       setDocuments(docs);
-    } catch (err) {
+    } catch {
       if (!project) toast('Failed to load project', 'error');
     } finally {
       setLoading(false);
@@ -65,8 +69,8 @@ export default function ProjectPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f8f9fb] flex items-center justify-center">
-        <div className="spinner w-6 h-6 border-[1.5px]" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="spinner w-7 h-7 border-[2px]" />
       </div>
     );
   }
@@ -74,73 +78,88 @@ export default function ProjectPage() {
   const processingCount = documents.filter((d) => d.status === 'PROCESSING').length;
 
   return (
-    <div className="min-h-screen bg-[#f8f9fb]">
+    <div className="min-h-screen">
       <ToastContainer />
 
       <nav className="navbar">
-        <span
-          className="navbar-brand cursor-pointer"
-          onClick={() => navigate('/')}
-        >
+        <span className="navbar-brand cursor-pointer" onClick={() => navigate('/')}>
           Mirage
         </span>
         <span className="navbar-sep">/</span>
-        <span className="text-[13px] text-[#0f1117] font-medium">{project?.name}</span>
+        <span className="text-[16px] font-semibold" style={{ color: 'var(--text)' }}>{project?.name}</span>
 
-        {processingCount > 0 && (
-          <div className="ml-auto flex items-center gap-2 text-[12px] text-amber-600 font-medium bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full">
-            <span className="spinner" style={{ width: 12, height: 12, borderWidth: 1.5, borderColor: '#fcd34d', borderTopColor: '#d97706' }} />
-            Processing {processingCount} file{processingCount > 1 ? 's' : ''}
-          </div>
-        )}
+        <div className="ml-auto flex items-center gap-3">
+          {processingCount > 0 && (
+            <div
+              className="flex items-center gap-2 text-[12px] font-semibold px-3 py-1.5 rounded-full"
+              style={{ color: '#a16207', background: '#fffbeb', border: '1px solid #fde68a' }}
+            >
+              <span className="spinner" style={{ width: 12, height: 12, borderWidth: 1.5, borderColor: '#fcd34d', borderTopColor: '#d97706' }} />
+              Processing {processingCount} file{processingCount > 1 ? 's' : ''}
+            </div>
+          )}
+          <UserMenu />
+        </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-7 py-6 pb-12">
-        {/* View toggle */}
-        <div className="flex items-center gap-1 mb-6 bg-white border border-[#e5e7ef] rounded-lg p-1 w-fit shadow-sm">
-          {['documents', 'graph'].map((v) => (
-            <button
-              key={v}
-              onClick={() => setActiveView(v)}
-              className={`px-4 py-1.5 rounded-md text-[12.5px] font-semibold transition-all duration-150 capitalize
-                ${activeView === v
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'text-[#8b90a7] hover:text-[#0f1117]'}`}
-            >
-              {v === 'documents' ? 'Workspace' : 'Knowledge Graph'}
-            </button>
-          ))}
+      <div className="max-w-[1280px] mx-auto px-8 py-8 pb-14">
+        <div className="flex items-center gap-1 mb-7 w-fit" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 4 }}>
+          {['documents', 'summary', 'graph'].map((v) => {
+            const labels = { documents: 'Workspace', summary: 'Summary', graph: 'Graph' };
+            return (
+              <button
+                key={v}
+                onClick={() => setActiveView(v)}
+                style={{
+                  padding: '7px 18px',
+                  borderRadius: 9,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: '-0.01em',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.12s ease, color 0.12s ease',
+                  ...(activeView === v
+                    ? { background: 'var(--accent)', color: '#fff' }
+                    : { background: 'transparent', color: 'var(--text-dim)' })
+                }}
+              >
+                {labels[v]}
+              </button>
+            );
+          })}
         </div>
 
-        {activeView === 'graph' ? (
+        {activeView === 'summary' ? (
+          <ProjectSummary projectId={projectId} projectName={project?.name || ''} />
+        ) : activeView === 'graph' ? (
           <KnowledgeGraph3D projectId={projectId} projectName={project?.name || ''} />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
-            {/* Left column */}
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_390px] gap-7 items-start">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[14px] font-semibold text-[#0f1117]">Documents</h2>
-                <span className="text-[12px] text-[#8b90a7]">{documents.length} uploaded</span>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--text-dim)' }}>Documents</h2>
+                <span className="text-[12px] font-semibold" style={{ color: 'var(--text-dim)' }}>{documents.length} uploaded</span>
               </div>
 
               <UploadArea projectId={projectId} onUploadComplete={fetchAll} />
 
-              <div className="mt-4">
+              <div className="mt-5">
                 {documents.length === 0 ? (
-                  <div className="empty-state border border-dashed border-[#e5e7ef] rounded-xl">
-                    <p className="text-[13px]">No documents yet — upload your first PDF above</p>
+                  <div className="empty-state card border-dashed">
+                    <p className="text-[15px]">No documents yet — upload your first PDF above</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-col gap-3">
                     {documents.map((doc) => {
                       const icons = {
                         DONE: (
-                          <svg className="w-4.5 h-4.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5" style={{ color: 'var(--accent)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                           </svg>
                         ),
                         ERROR: (
-                          <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4.5 h-4.5" style={{ color: 'var(--error)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                           </svg>
                         ),
@@ -152,26 +171,35 @@ export default function ProjectPage() {
                       return (
                         <div
                           key={doc._id}
-                          className={`flex items-center gap-4 px-4 py-3.5 rounded-xl border border-[#e5e7ef] bg-white transition-all duration-150
-                            ${doc.status === 'DONE' ? 'cursor-pointer hover:border-brand-200 hover:shadow-sm' : 'cursor-default'}`}
+                          className="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-150"
+                          style={{
+                            border: '1px solid var(--border)',
+                            background: 'var(--surface)',
+                            cursor: doc.status === 'DONE' ? 'pointer' : 'default',
+                          }}
+                          onMouseEnter={e => { if (doc.status === 'DONE') { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.background = 'var(--surface2)'; } }}
+                          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}
                           onClick={() => doc.status === 'DONE' && navigate(`/projects/${projectId}/documents/${doc._id}`)}
                         >
-                          <div className="w-9 h-9 rounded-lg bg-[#f3f4f8] border border-[#e5e7ef] flex items-center justify-center shrink-0">
+                          <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                            style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}
+                          >
                             {icons[doc.status] || icons.PROCESSING}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-[13.5px] font-medium text-[#0f1117] truncate">{doc.filename}</p>
-                            <p className="text-[11.5px] text-[#8b90a7] mt-0.5">
+                            <p className="text-[15px] font-semibold truncate" style={{ color: 'var(--text)' }}>{doc.filename}</p>
+                            <p className="text-[12px] mt-0.5" style={{ color: 'var(--text-dim)' }}>
                               {doc.pageCount ? `${doc.pageCount} pages · ` : ''}
                               {new Date(doc.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                             </p>
                             {doc.errorMessage && (
-                              <p className="text-[11px] text-red-500 mt-1">{doc.errorMessage}</p>
+                              <p className="text-[12px] mt-1" style={{ color: 'var(--error)' }}>{doc.errorMessage}</p>
                             )}
                           </div>
                           <StatusBadge status={doc.status} />
                           {doc.status === 'DONE' && (
-                            <svg className="w-4 h-4 text-[#d1d5e0] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 shrink-0" style={{ color: 'var(--border-strong)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                             </svg>
                           )}
@@ -183,8 +211,7 @@ export default function ProjectPage() {
               </div>
             </div>
 
-            {/* Right column — Chat */}
-            <div className="sticky top-[72px] h-[calc(100vh-100px)]">
+            <div className="sticky top-[90px] h-[calc(100vh-124px)]">
               <ChatBox projectId={projectId} projectName={project?.name || ''} />
             </div>
           </div>

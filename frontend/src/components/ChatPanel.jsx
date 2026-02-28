@@ -134,7 +134,7 @@ export default function ChatPanel({
           padding:      '10px 12px',
           marginBottom: 10,
           fontSize:     12,
-          color:        'var(--text, #e2e8f0)',
+          color:        'var(--text, #2A2520)',
           lineHeight:   1.6,
           position:     'relative',
           flexShrink:   0,
@@ -181,13 +181,13 @@ export default function ChatPanel({
       {/* ── Pinned image context block ── */}
       {imageContext && (
         <div style={{
-          background:   'rgba(99,102,241,0.07)',
-          border:       '1px solid rgba(99,102,241,0.3)',
+          background:   'rgba(55,50,47,0.05)',
+          border:       '1px solid var(--border)',
           borderRadius: 8,
           padding:      '10px 12px',
           marginBottom: 10,
           fontSize:     12,
-          color:        'var(--text, #e2e8f0)',
+          color:        'var(--text)',
           position:     'relative',
           flexShrink:   0,
           display:      'flex',
@@ -202,13 +202,13 @@ export default function ChatPanel({
               height:       42,
               objectFit:    'cover',
               borderRadius: 4,
-              border:       '1px solid rgba(99,102,241,0.4)',
+              border:       '1px solid var(--border)',
               flexShrink:   0,
             }}
           />
           <div style={{ flex: 1, minWidth: 0 }}>
             <span style={{
-              color:         'rgba(99,102,241,0.9)',
+              color:         'var(--text-dim)',
               fontWeight:    700,
               display:       'block',
               marginBottom:  2,
@@ -231,7 +231,7 @@ export default function ChatPanel({
               background: 'none',
               border:     'none',
               cursor:     'pointer',
-              color:      'rgba(99,102,241,0.6)',
+              color:      'var(--text-dim)',
               fontSize:   16,
               lineHeight: 1,
               padding:    0,
@@ -240,7 +240,7 @@ export default function ChatPanel({
             ×
           </button>
         </div>
-      )}}
+      )}
       <div style={{
         flex:          1,
         overflowY:     'auto',
@@ -256,7 +256,7 @@ export default function ChatPanel({
             flexDirection:  'column',
             alignItems:     'center',
             justifyContent: 'center',
-            color:          'var(--text-dim, #94a3b8)',
+            color:          'var(--text-dim, #6B6460)',
             textAlign:      'center',
             padding:        20,
             gap:            8,
@@ -281,7 +281,7 @@ export default function ChatPanel({
             alignItems: 'center',
             gap:        8,
             padding:    '8px 12px',
-            color:      'var(--text-dim, #94a3b8)',
+            color:      'var(--text-dim, #6B6460)',
             fontSize:   13,
           }}>
             <ThinkingDots />
@@ -312,7 +312,7 @@ export default function ChatPanel({
           flexWrap:   'wrap',
           gap:        5,
           padding:    '8px 0 4px',
-          borderTop:  '1px solid var(--border, #2a2d3e)',
+          borderTop:  '1px solid var(--border, #E2DBD5)',
           marginTop:  4,
           flexShrink: 0,
         }}>
@@ -322,13 +322,13 @@ export default function ChatPanel({
               onClick={() => handleQuickAction(a)}
               disabled={loading}
               style={{
-                background:   'var(--surface2, #252740)',
-                border:       '1px solid var(--border, #2a2d3e)',
+                background:   'var(--surface2, #F9F7F5)',
+                border:       '1px solid var(--border, #E2DBD5)',
                 borderRadius: 999,
                 padding:      '4px 10px',
                 fontSize:     11,
                 fontWeight:   500,
-                color:        'var(--text-dim, #94a3b8)',
+                color:        'var(--text-dim, #6B6460)',
                 cursor:       loading ? 'not-allowed' : 'pointer',
                 whiteSpace:   'nowrap',
                 transition:   'border-color 0.12s, color 0.12s',
@@ -336,13 +336,13 @@ export default function ChatPanel({
               }}
               onMouseEnter={e => {
                 if (!loading) {
-                  e.target.style.borderColor = imageContext ? 'rgba(99,102,241,0.6)' : 'rgba(255,215,0,0.5)';
-                  e.target.style.color = imageContext ? 'rgba(99,102,241,0.95)' : 'rgba(255,215,0,0.85)';
+                  e.target.style.borderColor = 'var(--border-strong)';
+                  e.target.style.color = 'var(--text)';
                 }
               }}
               onMouseLeave={e => {
-                e.target.style.borderColor = 'var(--border, #2a2d3e)';
-                e.target.style.color = 'var(--text-dim, #94a3b8)';
+                e.target.style.borderColor = 'var(--border, #E2DBD5)';
+                e.target.style.color = 'var(--text-dim, #6B6460)';
               }}
             >
               {a.label}
@@ -353,8 +353,8 @@ export default function ChatPanel({
 
       {/* ── Input area ── */}
       <div style={{
-        background:   'var(--surface2, #252740)',
-        border:       '1px solid var(--border, #2a2d3e)',
+        background:   'var(--surface2, #F9F7F5)',
+        border:       '1px solid var(--border, #E2DBD5)',
         borderRadius: 10,
         overflow:     'hidden',
         marginTop:    (context || imageContext) ? 4 : 8,
@@ -367,8 +367,8 @@ export default function ChatPanel({
             alignItems:   'center',
             gap:          8,
             padding:      '6px 10px',
-            borderBottom: '1px solid var(--border, #2a2d3e)',
-            background:   'rgba(99,102,241,0.05)',
+            borderBottom: '1px solid var(--border, #E2DBD5)',
+            background:   'var(--surface2)',
           }}>
             <img
               src={imageContext}
@@ -378,7 +378,7 @@ export default function ChatPanel({
                 height:       30,
                 objectFit:    'cover',
                 borderRadius: 4,
-                border:       '1px solid var(--border, #2a2d3e)',
+                border:       '1px solid var(--border, #E2DBD5)',
                 flexShrink:   0,
               }}
             />
@@ -401,7 +401,7 @@ export default function ChatPanel({
             alignItems:   'center',
             gap:          6,
             padding:      '6px 10px',
-            borderBottom: '1px solid var(--border, #2a2d3e)',
+            borderBottom: '1px solid var(--border, #E2DBD5)',
             background:   'rgba(255,215,0,0.05)',
           }}>
             <div style={{
@@ -469,7 +469,7 @@ export default function ChatPanel({
               border:      'none',
               padding:     '9px 12px',
               fontSize:    13,
-              color:       'var(--text, #e2e8f0)',
+              color:       'var(--text, #2A2520)',
               resize:      'none',
               outline:     'none',
               lineHeight:  1.5,
@@ -479,13 +479,13 @@ export default function ChatPanel({
             onClick={send}
             disabled={loading || (!input.trim() && !imageContext)}
             style={{
-              background:   (loading || (!input.trim() && !imageContext)) ? 'transparent' : 'var(--accent, #6366f1)',
+              background:   (loading || (!input.trim() && !imageContext)) ? 'transparent' : 'var(--accent, #37322F)',
               border:       'none',
               borderRadius: 7,
               margin:       '6px 6px 6px 0',
               padding:      '6px 12px',
               cursor:       (loading || (!input.trim() && !imageContext)) ? 'not-allowed' : 'pointer',
-              color:        (loading || (!input.trim() && !imageContext)) ? 'var(--text-dim, #94a3b8)' : '#fff',
+              color:        (loading || (!input.trim() && !imageContext)) ? 'var(--text-dim, #6B6460)' : '#fff',
               fontSize:     16,
               lineHeight:   1,
               transition:   'background 0.15s',
@@ -520,7 +520,7 @@ function MessageBubble({ msg }) {
         width:          26,
         height:         26,
         borderRadius:   '50%',
-        background:     isUser ? 'var(--accent, #6366f1)' : 'rgba(255,215,0,0.2)',
+        background:     isUser ? 'var(--accent, #37322F)' : 'var(--surface3)',        
         display:        'flex',
         alignItems:     'center',
         justifyContent: 'center',
@@ -567,7 +567,7 @@ function MessageBubble({ msg }) {
             style={{
               maxWidth:     180,
               borderRadius: msg.contextSnippet ? 0 : '8px 8px 0 0',
-              border:       '1px solid rgba(99,102,241,0.4)',
+              border:       '1px solid var(--border)',
               marginBottom: -4,
               display:      'block',
             }}
@@ -576,14 +576,14 @@ function MessageBubble({ msg }) {
 
         {/* Main bubble */}
         <div style={{
-          background:   isUser ? 'var(--accent, #6366f1)' : 'var(--surface2, #252740)',
-          border:       `1px solid ${isUser ? 'transparent' : 'var(--border, #2a2d3e)'}`,
+          background:   isUser ? 'var(--accent, #37322F)' : 'var(--surface2, #F9F7F5)',
+          border:       `1px solid ${isUser ? 'transparent' : 'var(--border, #E2DBD5)'}`,
           borderRadius: isUser
             ? ((msg.contextSnippet || msg.imageContext) ? '0 4px 12px 12px' : '12px 4px 12px 12px')
             : '4px 12px 12px 12px',
           padding:      '8px 12px',
           fontSize:     13,
-          color:        'var(--text, #e2e8f0)',
+          color:        isUser ? '#ffffff' : 'var(--text, #2A2520)',
           lineHeight:   1.6,
           whiteSpace:   'pre-wrap',
           wordBreak:    'break-word',
@@ -595,12 +595,12 @@ function MessageBubble({ msg }) {
             <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
               {msg.sources.map((s, i) => (
                 <span key={i} style={{
-                  background:   'rgba(99,102,241,0.15)',
-                  border:       '1px solid rgba(99,102,241,0.3)',
+                  background:   'var(--accent-dim)',
+                  border:       '1px solid var(--border)',
                   borderRadius: 4,
                   padding:      '2px 6px',
                   fontSize:     10,
-                  color:        'var(--accent-light, #818cf8)',
+                  color:        'var(--text-dim)',
                 }}>
                   p.{s.pageNumber}
                 </span>
@@ -623,7 +623,7 @@ function ThinkingDots() {
           width:        6,
           height:       6,
           borderRadius: '50%',
-          background:   'var(--accent-light, #818cf8)',
+          background:   'var(--accent, #37322F)',
           animation:    `thinkDot 1.2s ${i * 0.2}s ease-in-out infinite`,
           display:      'inline-block',
         }} />

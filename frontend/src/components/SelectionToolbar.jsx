@@ -27,7 +27,7 @@ export default function SelectionToolbar({ text, rect, onHighlight, onAsk }) {
     alignItems:   'center',
     gap:          4,
     background:   'var(--surface, #1e2030)',
-    border:       '1px solid var(--border, #2a2d3e)',
+    border:       '1px solid var(--border, #E2DBD5)',
     borderRadius: 999,
     boxShadow:    '0 4px 6px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.4)',
     padding:      '4px 6px',
@@ -42,11 +42,11 @@ export default function SelectionToolbar({ text, rect, onHighlight, onAsk }) {
     background:   'transparent',
     border:       'none',
     borderRadius: 999,
-    padding:      '4px 10px',
+    padding:      '6px 14px',
     cursor:       'pointer',
-    fontSize:     12,
+    fontSize:     14,
     fontWeight:   600,
-    color:        accent || 'var(--text, #e2e8f0)',
+    color:        accent || 'var(--text, #2A2520)',
     transition:   'background 0.12s',
   });
 
@@ -76,10 +76,10 @@ export default function SelectionToolbar({ text, rect, onHighlight, onAsk }) {
         >
           ✦ Add Insight
         </button>
-        <div style={{ width: 1, height: 16, background: 'var(--border, #2a2d3e)' }} />
+        <div style={{ width: 1, height: 16, background: 'var(--border, #E2DBD5)' }} />
         <button
           className="selToolbarBtn"
-          style={btnStyle('var(--accent-light, #818cf8)')}
+          style={btnStyle('var(--accent)')}
           onMouseDown={(e) => { e.preventDefault(); onAsk && onAsk(text); }}
         >
           💬 Ask AI

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
 const uploadthingRoute = require('./routes/uploadthing');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,9 @@ app.use(express.json({ limit: '10mb' }));
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+// Auth routes
+app.use('/api/auth', authRoutes);
 
 // API routes
 app.use('/api', apiRoutes);

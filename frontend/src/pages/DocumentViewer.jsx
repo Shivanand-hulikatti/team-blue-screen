@@ -6,6 +6,7 @@ import InsightTooltip from '../components/InsightTooltip';
 import SelectionToolbar from '../components/SelectionToolbar';
 import AddInsightModal from '../components/AddInsightModal';
 import ChatPanel from '../components/ChatPanel';
+import UserMenu from '../components/UserMenu';
 
 // ─── PDF.js CDN constants (lib + worker must be the same version) ───────────
 const PDFJS_VERSION = '3.11.174';
@@ -22,12 +23,13 @@ if (!document.getElementById('pdfjs-styles')) {
     .pdfPage {
       position: relative;
       display: block;
-      margin-bottom: 16px;
-      border-radius: 8px;
-      border: 1px solid #2a2d3e;
+      margin-bottom: 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
       overflow: visible;
       line-height: 1;
       background: #fff;
+      box-shadow: 0 12px 28px rgba(55, 50, 47, 0.08);
     }
 
     /* Layer 1 – canvas (visual rendering) */
@@ -68,9 +70,9 @@ if (!document.getElementById('pdfjs-styles')) {
   user-select: text;
   -webkit-user-select: text;
 }
-    /* Blue highlight on selection */
+    /* Warm highlight on selection */
     .pdfPage .textLayer span::selection {
-      background: rgba(0, 120, 255, 0.25);
+      background: rgba(55, 50, 47, 0.20);
       color: transparent;
     }
     .pdfPage .textLayer br::selection {
@@ -121,19 +123,19 @@ if (!document.getElementById('pdfjs-styles')) {
     /* Sidebar tab bar */
     .dvTab {
       flex: 1;
-      padding: 9px 0;
+      padding: 12px 0;
       background: transparent;
       border: none;
       border-bottom: 2px solid transparent;
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-dim, #94a3b8);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dim, #6B6460);
       transition: color 0.15s, border-color 0.15s;
     }
     .dvTab.tab-active {
-      color: var(--text, #e2e8f0);
-      border-bottom-color: var(--accent, #6366f1);
+      color: var(--text, #2A2520);
+      border-bottom-color: var(--accent, #37322F);
     }
   `;
   document.head.appendChild(s);
@@ -214,7 +216,7 @@ export default function DocumentViewer() {
     <div className="page" style={{ background: 'var(--bg)' }}>
       <nav className="navbar">
         <span className="navbar-brand" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          ✦ Mirage
+          Mirage
         </span>
         <span style={{ color: 'var(--border)' }}>›</span>
         <span
@@ -230,28 +232,30 @@ export default function DocumentViewer() {
         </span>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
           <button className="btn btn-ghost" onClick={() => setScale(s => Math.max(0.5, s - 0.2))}>−</button>
-          <span style={{ color: 'var(--text-dim)', lineHeight: '32px', fontSize: 13 }}>{Math.round(scale * 100)}%</span>
+          <span style={{ color: 'var(--text-dim)', lineHeight: '32px', fontSize: 14, fontWeight: 700 }}>{Math.round(scale * 100)}%</span>
           <button className="btn btn-ghost" onClick={() => setScale(s => Math.min(3, s + 0.2))}>+</button>
           <button
             className={`btn btn-ghost${screenshotMode ? ' btn-active' : ''}`}
             onClick={() => setScreenshotMode(s => !s)}
             title="Capture region to explain"
             style={{
-              color:  screenshotMode ? 'rgba(255,215,0,0.9)' : undefined,
-              border: screenshotMode ? '1px solid rgba(255,215,0,0.4)' : undefined,
+              color: screenshotMode ? '#a16207' : undefined,
+              border: screenshotMode ? '1px solid #fcd34d' : undefined,
+              background: screenshotMode ? '#fffbeb' : undefined,
             }}
           >
             📷
           </button>
+          <UserMenu />
         </div>
       </nav>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', height: 'calc(100vh - 65px)', overflow: 'hidden' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', height: 'calc(100vh - 74px)', overflow: 'hidden' }}>
         {/* PDF Viewer */}
         <div style={{
-          overflowY: 'auto', padding: '24px', background: '#111218',
+          overflowY: 'auto', padding: '28px', background: 'var(--surface2)',
           ...(screenshotMode && {
-            outline: '2px solid rgba(255,215,0,0.4)',
+            outline: '2px solid #fcd34d',
             outlineOffset: '-2px',
             animation: 'screenshotPulse 1.5s ease-in-out infinite',
           }),
@@ -285,7 +289,7 @@ export default function DocumentViewer() {
         <div style={{
           display: 'flex', flexDirection: 'column',
           overflowY: 'hidden',
-          background: 'var(--bg)',
+          background: 'var(--surface)',
           borderLeft: '1px solid var(--border)',
         }}>
           {/* Tab Bar */}
@@ -299,7 +303,7 @@ export default function DocumentViewer() {
           </div>
 
           {/* Tab Content */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: 18, display: 'flex', flexDirection: 'column' }}>
             {chatOpen ? (
               <ChatPanel
                 context={chatContext}
@@ -313,7 +317,7 @@ export default function DocumentViewer() {
               />
             ) : (
               <>
-                <h3 style={{ fontWeight: 600, marginBottom: 14, fontSize: 14, flexShrink: 0 }}>
+                <h3 style={{ fontWeight: 700, marginBottom: 14, fontSize: 16, flexShrink: 0, color: 'var(--text)' }}>
                   Document Insights
                 </h3>
                 <InsightSidebar insights={insights} />
@@ -779,8 +783,8 @@ function PdfRenderer({ url, scale, insights, projectId, documentId, onAddInsight
                 top:        Math.min(dragState.startY, dragState.currentY),
                 width:      Math.abs(dragState.currentX - dragState.startX),
                 height:     Math.abs(dragState.currentY - dragState.startY),
-                border:     '2px solid rgba(99,102,241,0.9)',
-                background: 'rgba(99,102,241,0.08)',
+                border:     '2px solid rgba(55,50,47,0.55)',
+                background: 'rgba(55,50,47,0.06)',
                 borderRadius: 3,
                 pointerEvents: 'none',
               }} />

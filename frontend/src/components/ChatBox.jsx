@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { sendChat } from '../api';
 
 export default function ChatBox({ projectId, projectName }) {
@@ -24,7 +25,8 @@ export default function ChatBox({ projectId, projectName }) {
     setLoading(true);
 
     try {
-      const { data } = await sendChat(projectId, q);
+      // send object with `message` field to ensure valid JSON request body
+      const { data } = await sendChat(projectId, { message: q });
       setMessages((prev) => [
         ...prev,
         {
@@ -34,6 +36,7 @@ export default function ChatBox({ projectId, projectName }) {
         },
       ]);
     } catch (err) {
+      console.error('chat send error', err);
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: `Error: ${err.message}`, isError: true },
@@ -50,24 +53,29 @@ export default function ChatBox({ projectId, projectName }) {
       height: '100%',
       background: 'var(--surface)',
       border: '1px solid var(--border)',
-      borderRadius: 'var(--radius)',
+      borderRadius: 18,
       overflow: 'hidden',
+      boxShadow: '0 4px 16px rgba(55,50,47,0.06)',
     }}>
-      {/* Header */}
       <div style={{
-        padding: '14px 18px',
+        padding: '14px 20px',
         borderBottom: '1px solid var(--border)',
-        background: 'var(--surface2)',
-        fontWeight: 600,
-        fontSize: 14,
+        background: 'var(--surface)',
+        fontWeight: 700,
+        fontSize: 13,
         display: 'flex',
         alignItems: 'center',
         gap: 8,
+        color: 'var(--text)',
+        letterSpacing: '0.04em',
+        textTransform: 'uppercase',
       }}>
-        <span>🤖</span> Research Assistant
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--accent)', opacity: 0.7 }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+        </svg>
+        Research Assistant
       </div>
 
-      {/* Messages */}
       <div style={{
         flex: 1,
         overflowY: 'auto',
@@ -82,25 +90,25 @@ export default function ChatBox({ projectId, projectName }) {
             justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
           }}>
             <div style={{
-              maxWidth: '80%',
-              padding: '10px 14px',
-              borderRadius: 12,
-              fontSize: 13,
-              lineHeight: 1.6,
+              maxWidth: '84%',
+              padding: '12px 14px',
+              borderRadius: 14,
+              fontSize: 14,
+              lineHeight: 1.65,
               background: msg.role === 'user'
                 ? 'var(--accent)'
                 : msg.isError
-                ? 'rgba(239,68,68,0.1)'
-                : 'var(--surface2)',
-              color: msg.isError ? 'var(--error)' : 'var(--text)',
-              border: msg.role === 'assistant' && !msg.isError
-                ? '1px solid var(--border)'
-                : 'none',
+                  ? 'rgba(192,57,43,0.07)'
+                  : 'var(--surface2)',
+              color: msg.role === 'user' ? '#ffffff' : (msg.isError ? 'var(--error)' : 'var(--text)'),
+              border: msg.role === 'assistant' && !msg.isError ? '1px solid var(--border)' : 'none',
             }}>
-              <p style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</p>
+              <div style={{ whiteSpace: 'pre-wrap' }}>
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
+              </div>
               {msg.sources && msg.sources.length > 0 && (
                 <div style={{ marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
-                  <p style={{ color: 'var(--text-dim)', fontSize: 11, marginBottom: 5, fontWeight: 600 }}>
+                  <p style={{ color: 'var(--text-dim)', fontSize: 11, marginBottom: 5, fontWeight: 700 }}>
                     SOURCES
                   </p>
                   {msg.sources.map((s, si) => (
@@ -108,14 +116,16 @@ export default function ChatBox({ projectId, projectName }) {
                       fontSize: 11,
                       color: 'var(--text-dim)',
                       marginBottom: 4,
-                      padding: '4px 8px',
+                      padding: '5px 8px',
                       background: 'var(--surface)',
-                      borderRadius: 6,
+                      borderRadius: 8,
                       border: '1px solid var(--border)',
                     }}>
                       📄 Page {s.pageNumber} · Score: {(s.score * 100).toFixed(0)}%
                       <br />
-                      <span style={{ fontStyle: 'italic' }}>{s.preview}</span>
+                      <div style={{ fontStyle: 'italic' }}>
+                        <ReactMarkdown>{s.preview}</ReactMarkdown>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -124,19 +134,19 @@ export default function ChatBox({ projectId, projectName }) {
           </div>
         ))}
         {loading && (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', color: 'var(--text-dim)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', color: 'var(--text-dim)', fontSize: 14 }}>
             <div className="spinner" /> Thinking...
           </div>
         )}
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div style={{
-        padding: '12px 16px',
+        padding: '13px 14px',
         borderTop: '1px solid var(--border)',
         display: 'flex',
         gap: 10,
+        background: 'var(--surface)',
       }}>
         <input
           className="input"

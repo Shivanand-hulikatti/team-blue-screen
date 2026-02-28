@@ -12,7 +12,8 @@
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
     "three-spritetext": "^1.10.0",
-    "uploadthing": "^6.4.0"
+    "uploadthing": "^6.4.0",
+    "react-markdown": "^8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

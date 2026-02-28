@@ -226,7 +226,7 @@ app.add_middleware(
 
 UPLOADTHING_SECRET = os.getenv("UPLOADTHING_SECRET", "")
 TEMP_DIR = tempfile.gettempdir()
-INSIGHT_CONCURRENCY = int(os.getenv("INSIGHT_CONCURRENCY", "4"))  # tune per LLM rate limit
+INSIGHT_CONCURRENCY = int(os.getenv("INSIGHT_CONCURRENCY", "10"))  # tune per LLM rate limit
 
 
 class ProcessRequest(BaseModel):
